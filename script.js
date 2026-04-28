@@ -305,5 +305,25 @@ downBtn.addEventListener('click', () => changeDirection(0, 1));
 leftBtn.addEventListener('click', () => changeDirection(-1, 0));
 rightBtn.addEventListener('click', () => changeDirection(1, 0));
 
-// Initial render to show empty board
+// Responsive Canvas Logic
+function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width > 0 && canvas.width !== rect.width) {
+        // Ajuste la résolution interne du canvas pour correspondre à sa taille réelle CSS
+        canvas.width = rect.width;
+        canvas.height = rect.width; // Maintient le format carré
+        
+        tileCountX = Math.floor(canvas.width / gridSize);
+        tileCountY = Math.floor(canvas.height / gridSize);
+        
+        if(!isPlaying) {
+            drawGame();
+        }
+    }
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+// Initial setup
+resizeCanvas();
 drawGame();
