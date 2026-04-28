@@ -9,14 +9,19 @@
     
     --glass-bg: rgba(30, 41, 59, 0.4);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --glow: 0 0 20px rgba(56, 189, 248, 0.3);
     
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -117,9 +122,10 @@ ul {
 .underline {
     height: 4px;
     width: 60px;
-    background: var(--primary);
+    background: linear-gradient(90deg, var(--primary), var(--accent));
     margin: 10px auto 0;
     border-radius: 2px;
+    box-shadow: var(--glow);
 }
 
 /* Buttons */
@@ -139,10 +145,11 @@ ul {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: #fff;
     box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .primary-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: 0 8px 25px rgba(56, 189, 248, 0.6);
 }
 
@@ -179,11 +186,17 @@ ul {
 
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     box-shadow: var(--glass-shadow);
+    transition: var(--transition);
+}
+.glass-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: var(--glow);
 }
 
 /* Navigation */
@@ -412,6 +425,7 @@ header.scrolled {
     display: flex;
     align-items: center;
     gap: 10px;
+    word-break: break-word;
 }
 
 .personal-info i {
@@ -458,7 +472,7 @@ header.scrolled {
     content: '';
     position: absolute;
     width: 4px;
-    background: var(--glass-border);
+    background: linear-gradient(to bottom, transparent, var(--primary), transparent);
     top: 0;
     bottom: 0;
     left: 50%;
@@ -484,6 +498,13 @@ header.scrolled {
     top: 25px;
     border-radius: 50%;
     z-index: 1;
+    box-shadow: var(--glow);
+    transition: var(--transition);
+}
+
+.timeline-item:hover::after {
+    background-color: var(--primary);
+    transform: scale(1.2);
 }
 
 .left {
@@ -526,6 +547,12 @@ header.scrolled {
     gap: 2rem;
     max-width: 1000px;
     margin: 0 auto;
+    width: 100%;
+}
+
+.skill-category {
+    min-width: 0;
+    width: 100%;
 }
 
 .skill-category h3 {
@@ -550,21 +577,27 @@ header.scrolled {
     gap: 10px;
     width: 100px;
     height: 100px;
-    background: var(--glass-bg);
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
     border: 1px solid var(--glass-border);
     border-radius: 15px;
     transition: var(--transition);
     font-size: 0.85rem;
     font-weight: 500;
+    text-align: center;
+    word-break: break-word;
+    padding: 5px;
+    backdrop-filter: blur(5px);
 }
 
 .skill-tag i {
-    font-size: 2rem;
+    font-size: 2.2rem;
+    transition: var(--transition);
 }
 
 .skill-tag:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: var(--glow);
+    border-color: var(--primary);
 }
 
 .skill-tag.html:hover i { color: #E34F26; }
@@ -580,18 +613,22 @@ header.scrolled {
     background: rgba(0,0,0,0.2);
     padding: 20px;
     border-radius: 15px;
+    width: 100%;
 }
 
 .soft-skills li {
     margin-bottom: 1rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 15px;
+    word-break: break-word;
 }
 
 .soft-skills i {
     font-size: 1.5rem;
     color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 3px;
 }
 
 /* Projects Section */
@@ -602,16 +639,34 @@ header.scrolled {
 }
 
 .project-card {
-    padding: 2rem;
+    padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
     height: 100%;
     transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
 }
 
 .project-card:hover {
     transform: translateY(-10px);
-    border-color: var(--primary);
+    border-color: rgba(56, 189, 248, 0.3);
+    box-shadow: var(--glow);
+}
+
+.project-card:hover::before {
+    transform: scaleX(1);
 }
 
 .project-icon {
@@ -754,6 +809,7 @@ header.scrolled {
     justify-content: center;
     gap: 10px;
     font-size: 1.1rem;
+    word-break: break-word;
 }
 
 .contact-item i {
